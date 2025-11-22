@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 class Zadacha8
@@ -113,20 +113,20 @@ class Zadacha8
     static void Z9()
     {
         Console.WriteLine();
-        string fName = "input.txt";
+        string inP = "input.txt";
 
-        if (!File.Exists(fName))
+        if (!File.Exists(inP))
         {
-            File.WriteAllText(fName, "Test <html> data <BODY> with <br> tags </HTML> and <1bad>");
+            File.WriteAllText(inP, "" );
             Console.WriteLine("Создан файл input.txt с тестовыми данными.");
         }
 
-        string[] allLines = File.ReadAllLines(fName);
+        string[] allL = File.ReadAllLines(inP);
         MyList<string> finalTags = new MyList<string>();
 
-        for (int i = 0; i < allLines.Length; i++)
+        for (int i = 0; i < allL.Length; i++)
         {
-            string s = allLines[i];
+            string s = allL[i];
             for (int j = 0; j < s.Length; j++)
             {
                 if (s[j] == '<')
@@ -170,8 +170,16 @@ class Zadacha8
                 }
             }
         }
+        removeDublTags(finalTags);
 
-        Console.WriteLine("Уникальные теги из файла:");
+        string[] outP = new string[finalTags.size()];
+        for (int i = 0; i < finalTags.size(); i++)
+        {
+            outP[i] = finalTags.get(i);
+        }
+        File.WriteAllLines("output.txt", outP);   
+
+        Console.WriteLine("Уникальные теги из файла (удалены, проверьте файл output.txt):");
         for (int i = 0; i < finalTags.size(); i++)
         {
             Console.WriteLine(finalTags.get(i));
@@ -179,7 +187,22 @@ class Zadacha8
         Console.WriteLine("Нажмите что-то");
         Console.ReadLine();
     }
+    static void removeDublTags(MyList<string> tags)
+    {
+        for (int i = 0; i < tags.size(); i++)
+        {
+            string v = CleanStr(tags.get(i));
 
+            for (int j = i + 1; j < tags.size(); j++)
+            {
+                if (CleanStr(tags.get(j)) == v)
+                {
+                    tags.remove(j);
+                    j--;
+                }
+            }
+        }
+    }
     static bool CheckTag(string t)
     {
         if (t.Length < 3) return false;
@@ -226,7 +249,7 @@ public class MyList<T>
 
     public MyList()
     {
-        arr = new T[10];
+        arr = new T[15];
         count = 0;
     }
 
@@ -234,7 +257,7 @@ public class MyList<T>
     {
         if (input == null)
         {
-            arr = new T[10];
+            arr = new T[15];
             count = 0;
         }
         else
